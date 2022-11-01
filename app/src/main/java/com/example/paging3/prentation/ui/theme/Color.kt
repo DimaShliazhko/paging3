@@ -1,4 +1,4 @@
-package com.example.paging3.ui.theme
+package com.example.paging3.prentation.ui.theme
 
 
 import androidx.compose.material.Colors

@@ -1,4 +1,4 @@
-package com.example.paging3
+package com.example.paging3.prentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -10,7 +10,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.paging3.ui.theme.Paging3Theme
+import com.example.paging3.prentation.ui.theme.Paging3Theme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
