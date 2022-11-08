@@ -10,12 +10,16 @@ import com.example.paging3.data.models.UnsplashImage
 import com.example.paging3.data.paging.SearchPagingSource
 import com.example.paging3.data.paging.UnsplashRemoteMediator
 import com.example.paging3.data.remote.UnsplashApi
+import com.example.paging3.data.remote.UnsplashApiImg
 import kotlinx.coroutines.flow.Flow
+import okhttp3.ResponseBody
+import retrofit2.Response
 import javax.inject.Inject
 
 @ExperimentalPagingApi
 class UnsplashRepositoryImpl @Inject constructor(
     private val unsplashApi: UnsplashApi,
+    private val unsplashApiImg: UnsplashApiImg,
     private val unsplashDatabase: UnsplashDatabase,
 ) {
 
@@ -32,6 +36,10 @@ class UnsplashRepositoryImpl @Inject constructor(
         ).flow
     }
 
+   suspend fun downloadImage(url: String):Response<ResponseBody> {
+       return unsplashApiImg.loadImage(url)
+    }
+
     fun searchImages(query: String): Flow<PagingData<UnsplashImage>> {
         return Pager(
             config = PagingConfig(pageSize = ITEMS_PER_PAGE),
@@ -40,5 +48,6 @@ class UnsplashRepositoryImpl @Inject constructor(
             }
         ).flow
     }
+
 
 }

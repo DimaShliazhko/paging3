@@ -1,5 +1,6 @@
 package com.example.paging3.prentation.screens
 
+import android.annotation.SuppressLint
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -10,6 +11,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import coil.annotation.ExperimentalCoilApi
 
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @ExperimentalPagingApi
 @ExperimentalCoilApi
 @Composable
@@ -36,7 +38,7 @@ fun SearchScreen(
             )
         },
         content = {
-            ListContent(items = searchedImages)
+            ListContent(items = searchedImages, onDownloadClick = {})
         }
     )
 }

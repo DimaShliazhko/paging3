@@ -7,12 +7,15 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Download
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -24,6 +27,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
+import androidx.paging.ExperimentalPagingApi
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.items
 import coil.annotation.ExperimentalCoilApi
@@ -33,10 +37,15 @@ import com.example.paging3.data.models.UnsplashImage
 import com.example.paging3.data.models.Urls
 import com.example.paging3.data.models.User
 import com.example.paging3.data.models.UserLinks
+import com.example.paging3.prentation.ui.theme.DownloadGray
 import com.example.paging3.prentation.ui.theme.HeartRed
 
+@OptIn(ExperimentalPagingApi::class)
 @Composable
-fun ListContent(items: LazyPagingItems<UnsplashImage>) {
+fun ListContent(
+    items: LazyPagingItems<UnsplashImage>,
+    onDownloadClick: (url: String) -> Unit,
+) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(all = 12.dp),
@@ -48,13 +57,21 @@ fun ListContent(items: LazyPagingItems<UnsplashImage>) {
                 unsplashImage.id
             }
         ) { unsplashImage ->
-            unsplashImage?.let { UnsplashItem(unsplashImage) }
+            unsplashImage?.let {
+                UnsplashItem(unsplashImage,
+                    onDownloadClick = { url ->
+                        onDownloadClick(url)
+                    })
+            }
         }
     }
 }
 
 @Composable
-fun UnsplashItem(unsplashImage: UnsplashImage) {
+fun UnsplashItem(
+    unsplashImage: UnsplashImage,
+    onDownloadClick: (url: String) -> Unit
+) {
 
     val painter = rememberAsyncImagePainter(
         unsplashImage.urls.regular,
@@ -109,12 +126,44 @@ fun UnsplashItem(unsplashImage: UnsplashImage) {
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
+            DownloadCounter(
+                modifier = Modifier.weight(3f),
+                imageVector = Icons.Default.Download,
+                unsplashImage.urls.regular,
+                onDownloadClick = { url ->
+                    onDownloadClick(url)
+                }
+            )
             LikeCounter(
                 modifier = Modifier.weight(3f),
                 painter = painterResource(id = R.drawable.ic_heart),
                 likes = "${unsplashImage.likes}"
             )
         }
+    }
+}
+
+@Composable
+fun DownloadCounter(
+    modifier: Modifier,
+    imageVector: ImageVector,
+    unsplashImageUrl: String,
+    onDownloadClick: (url: String) -> Unit
+) {
+    Row(
+        modifier = modifier
+            .fillMaxSize()
+            .clickable {
+                onDownloadClick(unsplashImageUrl)
+            },
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.End
+    ) {
+        Icon(
+            imageVector = imageVector,
+            contentDescription = "Download Icon",
+            tint = DownloadGray
+        )
     }
 }
 
@@ -156,7 +205,8 @@ fun UnsplashImagePreview() {
             id = "1",
             urls = Urls(regular = ""),
             likes = 100,
-            user = User(username = "Dzmitry", userLinks = UserLinks(html = ""))
-        )
+            user = User(username = "Dzmitry", userLinks = UserLinks(html = "")),
+        ),
+        onDownloadClick = {}
     )
 }

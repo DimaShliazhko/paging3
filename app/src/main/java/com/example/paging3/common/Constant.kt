@@ -7,4 +7,5 @@ object Constant {
     const val ITEMS_PER_PAGE = 5
     const val UNSPLASH_HEADERS = "Authorization : Client-ID "
     const val BASE_URL = "https://api.unsplash.com"
+    const val BASE_URL_IMG = "https://images.unsplash.com/"
 }
